@@ -1,0 +1,34 @@
+#https://leetcode.com/problems/delete-node-in-a-bst/?envType=study-plan-v2&envId=leetcode-75
+# Difficulty: Medium
+
+
+# Time: O(h)
+# Space: O(h)
+
+"""  Approach
+If node to delete has no children ➡️ return None
+If node has one child ➡️ return the non-null child
+If node has two children:
+Find the inorder successor (smallest in right subtree)
+Replace node's value with successor's value
+Delete successor from right subtree """
+
+class Solution:
+    def deleteNode(self, root,key):
+        if not root:
+            return None
+        if key < root.val:
+            root.left = self.deleteNode(root.left, key)
+        elif key > root.val:
+            root.right = self.deleteNode(root.right, key)
+        else:
+            if not root.right:
+                return root.left
+            if not root.left:
+                return root.right
+            temp = root.right
+            while temp.left:
+                temp = temp.left
+            root.val = temp.val
+            root.right = self.deleteNode(root.right, temp.val)
+        return root
