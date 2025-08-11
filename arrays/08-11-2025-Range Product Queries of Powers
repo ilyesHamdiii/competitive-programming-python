@@ -1,0 +1,51 @@
+#https://leetcode.com/problems/range-product-queries-of-powers/description/
+
+# Difficulty: Medium
+# Time: O(log n).
+# Space: O(log n) for storing powers of 2.  
+
+#APPROACH:        
+"""Convert n to binary and remove the '0b' prefix using bin(n)[2:].
+
+Identify powers of 2 present in n:
+
+Reverse the binary string so that we can track powers starting from 2^0.
+
+For each 1 bit at position exp, add 2**exp to the powers list.
+
+Answer queries:
+
+For each query [left, right], multiply all values in powers from index left to right.
+
+Apply modulo 10**9 + 7 to keep numbers within limits.
+
+Return the results for all queries.
+
+Complexity
+Time complexity:
+Extracting powers from binary: O(log n) (since number of bits in n is about log₂n).
+
+Answering each query: In the worst case, multiplying log n elements, so for q queries → O(q · log n).
+
+Space complexity:
+Storing powers: O(log n).
+
+Result list: O(q)
+"""
+def productQueries(self, n: int, queries: List[List[int]]) -> List[int]:
+    bin_n=bin(n)[2:]
+    powers=[]
+    exp=0
+    for i in bin_n[::-1]:
+        if i=="1":
+            powers.append(2**exp)
+        exp+=1
+    ans=[]
+    for query in queries:
+        left,right=query
+        product=1
+        for i in range(left,right+1):
+            product*=powers[i]
+        ans.append(product%(10**9+7))
+    return ans
+
